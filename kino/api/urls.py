@@ -1,6 +1,4 @@
 from django.urls import path
-from django.urls.conf import include
-import rest_framework
 from .views import *
 
 app_name = 'api'

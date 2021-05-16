@@ -22,5 +22,9 @@ urlpatterns = [
 
     #Api 
 
-    path("", include('api.urls'))
+    path("", include('api.urls')),
+    
+    #Movies
+
+    path("movies/", include('movies.urls')),
 ]
