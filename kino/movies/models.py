@@ -16,16 +16,8 @@ class Movie(models.Model):
         verbose_name = "Movie"
         verbose_name_plural = "Movies"
 
-    def __str__(self) -> str:
-        return "{title} {price}".format(title = self.title, price = self.price)
-
-    def details(self):
-        return {
-            'title':self.title,
-            'price':self.price,
-            'rating':self.rating,
-            'description':self.description
-        }
+    def __str__(self):
+        return self.title
 
 class Ticket(models.Model):
     id = models.IntegerField(primary_key=True, unique = True)

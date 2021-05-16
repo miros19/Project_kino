@@ -31,6 +31,7 @@ class Account(AbstractBaseUser):
     id = models.IntegerField(primary_key=True, unique=True )
     email = models.EmailField(verbose_name="E-mail", unique=True)
     name = models.CharField(verbose_name="Name", max_length=20)
+    funds = models.IntegerField(default = 0)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

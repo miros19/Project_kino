@@ -52,9 +52,7 @@ def login_view(request):
             token = jwt.encode(payLoad,'key256', algorithm='HS256')
 
             response = Response()
-
             response.set_cookie(key='jwt', value=token, httponly=True)
-            
             response.data = {
                 "jwt": token
             }
@@ -68,20 +66,16 @@ def account_view(request):
         cookie = request.COOKIES.get('jwt')
 
         if not cookie:
-            raise AuthenticationFailed("User not authenticaded!")
+            raise AuthenticationFailed("User not authenticated!")
         
         else:
             try:
                 payLoad = jwt.decode(cookie, 'key256', algorithms=['HS256'])
             except jwt.ExpiredSignatureError:
-                raise AuthenticationFailed("User not authenticaded!")
+                raise AuthenticationFailed("User not authenticated!")
             user = Account.objects.get(id = payLoad['id'])
-            
-            data = {'id': user.id, 'name': user.name, 'email':user.email, 'tickets': []}
 
-            serializer = AccountSerializer(data)
-
-            print(serializer.data)
+            serializer = AccountSerializer(user)
 
             return Response(serializer.data)
 
@@ -93,3 +87,31 @@ class LogoutView(APIView):
             'Message': 'Logged out!'
         }
         return response
+
+class AddFunds(APIView):
+    def post(self, request):
+        cookie = request.COOKIES.get('jwt')
+
+        if not cookie:
+            raise AuthenticationFailed("User not authenticated!")
+        
+        else:
+            try:
+                payLoad = jwt.decode(cookie, 'key256', algorithms=['HS256'])
+            except jwt.ExpiredSignatureError:
+                raise AuthenticationFailed("User not authenticated!")
+            
+            serializer = FundsSerializer(data = request.data)
+            if serializer.is_valid():
+                user = Account.objects.get(id = payLoad['id'])
+                funds = serializer['funds'].value
+                print(funds)
+                user.funds += funds
+                user.save()
+                response = Response()
+                response.data = {
+                    'Message': 'Funds added successfully!'
+                }
+            return response
+
+

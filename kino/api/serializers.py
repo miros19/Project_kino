@@ -28,13 +28,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         return account
 
-class AccountSerializer(serializers.Serializer):
+class AccountSerializer(serializers.ModelSerializer):
     
-    id = serializers.IntegerField()
-    name = serializers.CharField()
-    email = serializers.EmailField()
-    tickets = serializers.ListField(
-        child = serializers.CharField(), 
-        allow_empty = True
-    )
+    class Meta:
+        model = Account
+        fields = ['id', 'email', 'name', 'funds']
     
+class FundsSerializer(serializers.Serializer):
+
+    funds = serializers.IntegerField()
