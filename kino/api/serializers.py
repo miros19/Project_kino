@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .models import *
 
+#Serializer created to register a user
 class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style = {'input_type':'password'}, write_only = True)
 
@@ -12,6 +13,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'password':{'write_only':True}
         }
     
+    #Overriting save() method to save user to database
     def save(self):
         account = Account(
             email = self.validated_data['email'],
@@ -28,12 +30,14 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         return account
 
+#Serializer created to display user's account
 class AccountSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Account
         fields = ['id', 'email', 'name', 'funds']
-    
+
+#Serializer created to update user's funds  
 class FundsSerializer(serializers.Serializer):
 
     funds = serializers.IntegerField()

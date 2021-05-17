@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models.deletion import CASCADE
 from api.models import Account
 
-# Create your models here.
+#Database models for movies and tickets
 
 class Movie(models.Model):
     id = models.IntegerField(primary_key=True, unique = True)
@@ -23,3 +23,7 @@ class Ticket(models.Model):
     id = models.IntegerField(primary_key=True, unique = True)
     account_id = models.ForeignKey(Account, on_delete=CASCADE, verbose_name="User")
     movie_id = models.ForeignKey(Movie, on_delete=CASCADE, verbose_name="Movie")
+
+    class Meta:
+        verbose_name = "Ticket"
+        verbose_name_plural = "Tickets"

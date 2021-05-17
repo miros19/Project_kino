@@ -2,19 +2,9 @@ from enum import unique
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+#Custom menager created to manage custom user model
 class MyAccountManager(BaseUserManager):
-    def create_user(self, email, password, name):
-        if not email:
-            raise ValueError("Podaj email")
-        if not name:
-            raise ValueError("Podaj imię")
-        user = self.model(
-            email = self.normalize_email(email),
-            name = name,
-        )
-        user.set_password(password)
-        user.save(using = self._db)
-        return user
+    #Overriting create_superuser method with custom model
     def create_superuser(self, email, password, name):
         user = self.create_user(
             name = name,
@@ -27,6 +17,7 @@ class MyAccountManager(BaseUserManager):
         user.save(using = self._db)
         return user
 
+#Custom user model containing desired fields
 class Account(AbstractBaseUser):
     id = models.IntegerField(primary_key=True, unique=True )
     email = models.EmailField(verbose_name="E-mail", unique=True)
@@ -42,17 +33,11 @@ class Account(AbstractBaseUser):
 
     objects = MyAccountManager()
 
+    #STR method for clean view
     def __str__(self):
         return self.name
 
-	# For checking permissions. to keep it simple all admin have ALL permissons
-    def has_perm(self, perm, obj=None):
-        return self.is_admin
-
-	# Does this user have permission to view this app? (ALWAYS YES FOR SIMPLICITY)
-    def has_module_perms(self, app_label):
-        return True
-
+    # Names used to display in admin panel
     class Meta:
         verbose_name = "User"
         verbose_name_plural = "Users"

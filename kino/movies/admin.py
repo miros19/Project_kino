@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from .models import *
 
-
+#Customizing display models for movies and tickets
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'rating')
     search_fields = ('title', 'price', 'rating')
@@ -22,6 +22,6 @@ class TicketAdmin(admin.ModelAdmin):
     list_filter = ()
     fieldsets = ()
 
-
+#Registering models with custom views
 admin.site.register(Movie, MovieAdmin)
 admin.site.register(Ticket, TicketAdmin)
